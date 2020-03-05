@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GIF Search</title>
+</head>
+<body>
+
+    <form id="search-form">
+        <input id="input-search" placeholder="Search">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="container">
+
+    </div>
+    
+<script>
+
+    const searchForm = document.getElementById('search-form')
+    const InputSearch = document.getElementById('input-search')
+    const container = document.getElementById('container')
+
+    searchForm.addEventListener('submit', submitSearch)
+
+    function submitSearch(e) {
+        e.preventDefault()
+        const query = InputSearch.value
+        fetchData(query)
+    }
+
+    function fetchData(search = 'cats') {
+        const api = '4qZXcfrdG2ZTY35J0eN1Wp6lUd1Wqwk0'
+        const path = `https://api.giphy.com/v1/gifs/search?api_key=${api}&q=${search}`
+
+        fetch(path)
+        .then(function(res) { return res.json() })
+        .then(function(json) { handleData(json) })
+        .catch(function(err) { console.log(err.message)} )
+
+    }
+
+    function handleData(json) {
+        const data = json.data
+        let htmlStr = ''
+        for (let i = 0; i < data.length; i += 1) {
+            const image = data[i].images.fixed_height_small
+            const src = image.url 
+            const width = image.width 
+            const height = image.height 
+            
+            htmlStr += `<img src="${src}" width="${width}" height="${height}">`
+        }
+
+        container.innerHTML = htmlStr
+    }
+
+
+</script>
+</body>
+
+</html>
